@@ -1,0 +1,265 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1" />
+  <title>감자키우기 - 책/영화 기록</title>
+  <link rel="stylesheet" href="./css/style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+</head>
+<body>
+  <div class="app-container">
+    <!-- 토스트 메시지 -->
+    <div class="toast" id="toast">
+      <i class="fas fa-check-circle"></i>
+      <span id="toast-message">저장되었습니다!</span>
+    </div>
+    
+    <!-- ========== 내 공간 (홈) ========== -->
+    <section class="view active" id="view-home">
+      <div class="page-content">
+        <h1 class="page-title">감자키우기</h1>
+        
+        <!-- 프로필 카드 -->
+        <div class="profile-card">
+          <div class="profile-avatar">
+            <i class="fas fa-user"></i>
+          </div>
+          <div class="profile-info">
+            <div class="profile-name">감자조아</div>
+            <div class="profile-bio">안녕하세요. 감자조아의 공간입니다.</div>
+          </div>
+        </div>
+
+        <!-- 메인 그리드 -->
+        <div class="home-grid">
+          <!-- 왼쪽: 기록 통계 -->
+          <div class="section-card">
+            <div class="section-header">
+              <span>기록</span>
+              <i class="fas fa-chevron-right"></i>
+            </div>
+            
+            <div class="tabs-container">
+              <button class="tab-btn active" data-range="year">올해</button>
+              <button class="tab-btn" data-range="month">이번달</button>
+              <button class="tab-btn" data-range="all">평생</button>
+            </div>
+
+            <div class="stats-list">
+              <div class="stat-item">
+                <span>읽은 책</span>
+                <span class="stat-value" id="stat-books">00권</span>
+              </div>
+              <div class="stat-item">
+                <span>감상 영화</span>
+                <span class="stat-value" id="stat-movies">00편</span>
+              </div>
+            </div>
+
+            <!-- 컬렉션 -->
+            <div class="section-header" style="margin-top: 20px;">
+              <span>컬렉션</span>
+              <i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="collection-grid" id="collection-grid">
+              <div class="collection-item add-collection" id="btn-add-collection">
+                <i class="fas fa-plus"></i>
+                <span>만들기</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- 오른쪽: 취향의 방 -->
+          <div class="section-card">
+            <div class="section-header">
+              <span>취향의 방(이달의 최고작)</span>
+              <i class="fas fa-chevron-right"></i>
+            </div>
+            
+            <div class="filter-select">
+              <select id="best-filter">
+                <option value="all">책/영화</option>
+                <option value="book">책</option>
+                <option value="movie">영화</option>
+              </select>
+            </div>
+
+            <div class="best-list" id="best-list">
+              <!-- 동적으로 채워짐 -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== 기록 검색 ========== -->
+    <section class="view" id="view-search">
+      <div class="page-content">
+        <h1 class="page-title">영화/책 검색</h1>
+        
+        <div class="search-box">
+          <i class="fas fa-search"></i>
+          <input type="text" id="search-input" placeholder="검색" />
+        </div>
+
+        <div class="search-results" id="search-results">
+          <!-- 검색 결과 동적 생성 -->
+        </div>
+
+        <button class="btn-next" id="btn-search-next" style="display:none;">다음</button>
+      </div>
+    </section>
+
+    <!-- ========== 기록 작성 - 단계 1: 검색 ========== -->
+    <section class="view" id="view-write-search">
+      <div class="page-content">
+        <h1 class="page-title">영화/책 검색</h1>
+        
+        <!-- 검색 타입 탭 -->
+        <div class="search-type-tabs">
+          <button class="search-type-tab active" data-type="all">전체</button>
+          <button class="search-type-tab" data-type="movie">영화</button>
+          <button class="search-type-tab" data-type="book">책</button>
+        </div>
+        
+        <div class="search-box">
+          <i class="fas fa-search"></i>
+          <input type="text" id="write-search-input" placeholder="제목을 입력하세요" />
+        </div>
+
+        <div class="search-hint">
+          <i class="fas fa-info-circle"></i>
+          <span>검색 후 원하는 작품을 선택하세요</span>
+        </div>
+
+        <div class="search-results" id="write-search-results">
+          <!-- API 검색 결과 -->
+        </div>
+
+        <button class="btn-next" id="btn-write-next-1" style="display:none;">다음</button>
+      </div>
+    </section>
+
+    <!-- ========== 기록 작성 - 단계 2: 별점 ========== -->
+    <section class="view" id="view-write-rating">
+      <div class="page-content">
+        <h1 class="page-title">영화/책 기록</h1>
+        
+        <div class="selected-item-card" id="selected-item-display">
+          <div class="item-thumb"><i class="fas fa-image"></i></div>
+          <div class="item-info">
+            <div class="item-title">제목</div>
+            <div class="item-sub">영화/ 2024</div>
+          </div>
+        </div>
+
+        <div class="rating-section">
+          <div class="rating-score" id="rating-score">0.0</div>
+          <div class="star-rating" id="star-rating">
+            <!-- 별점 동적 생성 -->
+          </div>
+        </div>
+
+        <button class="btn-next" id="btn-write-next-2">다음</button>
+      </div>
+    </section>
+
+    <!-- ========== 기록 작성 - 단계 3: 감상평 ========== -->
+    <section class="view" id="view-write-review">
+      <div class="page-content">
+        <div class="page-header">
+          <h1 class="page-title">영화/책 기록</h1>
+          <button class="btn-save" id="btn-save-record">저장</button>
+        </div>
+        
+        <div class="selected-item-card" id="selected-item-display-2">
+          <div class="item-thumb"><i class="fas fa-image"></i></div>
+          <div class="item-info">
+            <div class="item-title">제목</div>
+            <div class="item-sub">영화/ 2024</div>
+          </div>
+        </div>
+
+        <div class="date-badge" id="record-date">
+          2025.12.12. (금)
+        </div>
+
+        <div class="review-box">
+          <textarea id="review-text" placeholder="'작품명' 에 대해 어떻게 생각하시나요?"></textarea>
+        </div>
+
+        <div class="review-toolbar">
+          <div class="toolbar-left">
+            <button class="tool-btn"><i class="fas fa-plus"></i></button>
+            <button class="tool-btn"><i class="fas fa-image"></i></button>
+            <button class="tool-btn"><i class="fas fa-quote-left"></i></button>
+            <button class="tool-btn"><i class="fas fa-map-marker-alt"></i></button>
+          </div>
+          <button class="btn-collection" id="btn-add-to-collection">
+            <i class="fas fa-plus"></i> 컬렉션
+          </button>
+        </div>
+
+        <div class="tags-input-container">
+          <input type="text" id="tags-input" placeholder="태그 (쉼표로 구분: 인생영화, 감동...)">
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== 기록 상세/수정 ========== -->
+    <section class="view" id="view-detail">
+      <div class="page-content">
+        <div class="page-header">
+          <h1 class="page-title">기록 상세</h1>
+          <div class="header-actions">
+            <button class="btn-edit" id="btn-edit-record"><i class="fas fa-edit"></i></button>
+            <button class="btn-delete" id="btn-delete-record"><i class="fas fa-trash"></i></button>
+          </div>
+        </div>
+        
+        <div class="selected-item-card" id="detail-item-display">
+          <div class="item-thumb"><i class="fas fa-image"></i></div>
+          <div class="item-info">
+            <div class="item-title">제목</div>
+            <div class="item-sub">영화/ 2024</div>
+          </div>
+        </div>
+
+        <div class="detail-rating">
+          <div class="star-display" id="detail-stars"></div>
+          <span class="detail-score" id="detail-score">4.0</span>
+        </div>
+
+        <div class="detail-date" id="detail-date">2025.12.12. (금)</div>
+
+        <div class="detail-review" id="detail-review">
+          감상평 내용이 여기에 표시됩니다.
+        </div>
+
+        <div class="detail-tags" id="detail-tags">
+          <!-- 태그 칩들 -->
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== 하단 네비게이션 ========== -->
+    <nav class="bottom-nav">
+      <button class="nav-item" data-view="view-write-search">
+        <i class="fas fa-user"></i>
+        <span>기록 작성</span>
+      </button>
+      <button class="nav-item" data-view="view-search">
+        <i class="fas fa-search"></i>
+        <span>기록 검색</span>
+      </button>
+      <button class="nav-item active" data-view="view-home">
+        <i class="fas fa-home"></i>
+        <span>내 공간</span>
+      </button>
+    </nav>
+  </div>
+
+  <script type="module" src="./js/app.js"></script>
+</body>
+</html>
